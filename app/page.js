@@ -1,9 +1,11 @@
-import './global.css';
+import './globals.css';
+import KanbanBoard from './components/KanbanBoard';
 
 export default function Home() {
   return (
     <div>
-      <h1> Hello Mantej </h1>
+      <KanbanBoard/>
     </div>
+    
   )
 }
