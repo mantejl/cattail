@@ -6,7 +6,7 @@ import RequestCard from './components/RequestCard';
 export default function Home() {
   return (
     <div>
-      <RequestCard/>
+      <KanbanBoard/>
     </div>
     
   )
