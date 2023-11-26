@@ -1,10 +1,9 @@
 import './globals.css';
-import KanbanBoard from './components/KanbanBoard';
+import Profile from './profile/page.js';
 
 export default function Home() {
   return (
     <div>
-      <KanbanBoard/>
     </div>
     
   )

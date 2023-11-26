@@ -2,8 +2,6 @@
 import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 
-// ... (existing imports)
-
 function CardItem({ data, index }) {
     const [title, setTitle] = useState(data.title);
     const [date, setDate] = useState(data.date || '');
