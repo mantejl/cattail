@@ -1,13 +1,8 @@
-import './globals.css';
-import KanbanBoard from './components/KanbanBoard';
-import NavBar from './components/NavBar';
-import RequestCard from './components/RequestCard'; 
+import "./globals.css";
+import KanbanBoard from "./components/KanbanBoard";
+import NavBar from "./components/NavBar";
+import RequestCard from "./components/RequestCard";
 
 export default function Home() {
-  return (
-    <div>
-      <KanbanBoard/>
-    </div>
-    
-  )
+  return <div></div>;
 }
