@@ -6,10 +6,12 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <main>
-          <NavBar />
-          {children}
-        </main>
+        <div className="flex">
+          <div>
+            <NavBar />
+          </div>
+          <main className="flex-1 pt-8">{children}</main>
+        </div>
       </body>
     </html>
   );
