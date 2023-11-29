@@ -16,15 +16,15 @@ function createGuidId() {
 const KanbanBoard = () => {
   const [columns, setColumns] = useState({
     todo: {
-      name: "To Do",
+      name: "TO DO",
       items: [],
     },
     doing: {
-      name: "In Progress",
+      name: "IN PROGRESS",
       items: [],
     },
     done: {
-      name: "Done",
+      name: "DONE",
       items: [],
     },
   });

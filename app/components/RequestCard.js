@@ -2,17 +2,15 @@
 
 import React from 'react';
 import { Button, Card } from 'flowbite-react';
+// ... (your existing imports)
 
 const Request = () => {
   return (
     <Card className="max-w-md p-4 bg-white shadow-md rounded-md">
-
-
-        {/* Time Stamp */}
+      {/* Time Stamp */}
       <p className="text-gray-500 font-normal text-sm mb-2">
         2 days ago
       </p>
-
 
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         Harry Potter Character Design Project
@@ -46,13 +44,13 @@ const Request = () => {
       {/* Buttons side by side */}
       <div className="flex mt-4">
         {/* Accept Button */}
-        <Button className="mr-2" style={{ backgroundColor: 'orange' }}>
+        <Button className="mr-2" style={{ backgroundColor: '#C3500F' }}>
           Accept
         </Button>
 
-        {/* Request Button (Outlined with Orange) */}
-        <Button style={{ color: 'black', backgroundColor: 'white', border: '2px solid orange' }}>
-           Request
+        {/* Request Button (Outlined with Orange Border) */}
+        <Button style={{ color: '#C3500F', border: '2px solid #C3500F', backgroundColor: 'white' }}>
+          Request
         </Button>
       </div>
     </Card>
