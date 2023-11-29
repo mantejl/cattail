@@ -10,6 +10,7 @@ const FileUpload = ({ projectID }) => {
   const [fileUrls, setFileUrls] = useState([]);
 
   const filesListRef = ref(stg, `files/${projectID}/`);
+
   const projectFileUrlsRef = dbRef(
     database,
     `users/Elissa/projects/${projectID}/fileUrls`

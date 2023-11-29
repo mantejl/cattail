@@ -37,14 +37,16 @@ export default function IntakeForm() {
     deadline: "",
     details: "",
     images: [],
+    imagesUploading: false,
   });
-
-  useEffect(() => {
-    console.log(key);
-  }, [key]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (formData.imagesUploading) {
+      alert("Images are still uploading. Please wait.");
+      return;
+    }
 
     const requestsRef = ref(database, "users/Elissa/requests");
     const pushRef = push(requestsRef, formData);
@@ -60,31 +62,39 @@ export default function IntakeForm() {
     }));
   };
 
-  const handleFileUpload = async (currentKey, files) => {
+  const handleFileUpload = async (files) => {
     const storageRefPath = "images/";
     const imagesRef = storageRef(stg, storageRefPath);
 
-    const uploadedURLs = await Promise.all(
-      Array.from(files).map(async (file) => {
-        const imageRef = storageRef(imagesRef, file.name);
-        try {
-          const snapshot = await uploadBytes(imageRef, file);
-          const url = await getDownloadURL(snapshot.ref);
-          console.log(`File uploaded: ${file.name}`, url);
-          return url;
-        } catch (error) {
-          console.error(`Error uploading file ${file.name}:`, error);
-          return null;
-        }
-      })
-    );
+    try {
+      setFormData((prevData) => ({ ...prevData, imagesUploading: true }));
 
-    console.log(uploadedURLs);
+      const uploadedURLs = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const imageRef = storageRef(imagesRef, file.name);
+          try {
+            const snapshot = await uploadBytes(imageRef, file);
+            const url = await getDownloadURL(snapshot.ref);
+            console.log(`File uploaded: ${file.name}`, url);
+            return url;
+          } catch (error) {
+            console.error(`Error uploading file ${file.name}:`, error);
+            return null;
+          }
+        })
+      );
 
-    setFormData((prevData) => ({
-      ...prevData,
-      images: [...uploadedURLs],
-    }));
+      console.log(uploadedURLs);
+
+      setFormData((prevData) => ({
+        ...prevData,
+        images: [...uploadedURLs],
+        imagesUploading: false,
+      }));
+    } catch (error) {
+      console.error("Error during image upload:", error);
+      setFormData((prevData) => ({ ...prevData, imagesUploading: false }));
+    }
   };
 
   return (
@@ -311,10 +321,12 @@ export default function IntakeForm() {
             id="file"
             multiple
             helperText="Upload at least 3 reference images per character and 3 for the background (if applicable)"
-            onChange={(e) => handleFileUpload(key, e.target.files)}
+            onChange={(e) => handleFileUpload(e.target.files)}
           />
         </div>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={formData.imagesUploading}>
+          Submit
+        </Button>
       </form>
     </div>
   );

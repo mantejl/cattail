@@ -62,6 +62,7 @@ const RequestCard = ({
     const projectsRef = ref(database, `users/Elissa/projects/${requestKey}`);
     const snapshot = await get(projectsRef);
     const newProjectData = {
+      title: title,
       tasks: {
         toDo: [],
         inProgress: [],

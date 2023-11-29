@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/outline";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { database } from "../firebase";
-import { ref as dbRef, onValue, set } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 
 function createGuidId() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -32,21 +32,31 @@ const KanbanBoard = ({ projectID }) => {
   });
 
   useEffect(() => {
-    const tasksRef = dbRef(
-      database,
-      `users/Elissa/projects/${projectID}/tasks`
-    );
+    const tasksRef = ref(database, `users/Elissa/projects/${projectID}/tasks`);
+
     const unsubscribe = onValue(tasksRef, (snapshot) => {
       const tasksData = snapshot.val() || {
         toDo: [],
         inProgress: [],
         done: [],
       };
-      setColumns({
-        toDo: { name: "To Do", items: tasksData.toDo || [] },
-        inProgress: { name: "In Progress", items: tasksData.inProgress || [] },
-        done: { name: "Done", items: tasksData.done || [] },
-      });
+
+      if (tasksData) {
+        setColumns({
+          toDo: {
+            name: "To Do",
+            items: tasksData.toDo ? tasksData.toDo.items || [] : [],
+          },
+          inProgress: {
+            name: "In Progress",
+            items: tasksData.inProgress ? tasksData.inProgress.items || [] : [],
+          },
+          done: {
+            name: "Done",
+            items: tasksData.done ? tasksData.done.items || [] : [],
+          },
+        });
+      }
     });
 
     return () => unsubscribe();
@@ -76,11 +86,29 @@ const KanbanBoard = ({ projectID }) => {
     );
 
     setColumns(newColumns);
-    const tasksRef = dbRef(
-      database,
-      `users/Elissa/projects/${projectID}/tasks`
-    );
+    const tasksRef = ref(database, `users/Elissa/projects/${projectID}/tasks/`);
     set(tasksRef, columns);
+  };
+
+  const handleTaskDelete = (columnName, taskId) => {
+    const updatedColumns = { ...columns };
+    const columnIndex = Object.keys(updatedColumns).findIndex(
+      (key) => key === columnName
+    );
+
+    updatedColumns[columnName].items = updatedColumns[columnName].items.filter(
+      (item) => item.id !== taskId
+    );
+
+    setColumns(updatedColumns);
+
+    const tasksRef = ref(
+      database,
+      `users/Elissa/projects/${projectID}/tasks/${columnName}/items`
+    );
+
+    // Set the updated array of items
+    set(tasksRef, updatedColumns[columnName].items);
   };
 
   const onTextAreaKeyPress = (e) => {
@@ -106,9 +134,9 @@ const KanbanBoard = ({ projectID }) => {
       setCurrentDate("");
       console.log("Saving to database:", item);
 
-      const tasksRef = dbRef(
+      const tasksRef = ref(
         database,
-        `users/Elissa/projects/${projectID}/tasks/${selectedColumn}`
+        `users/Elissa/projects/${projectID}/tasks/${selectedColumn}/items`
       );
       set(tasksRef, newColumns[selectedColumn].items);
       e.target.value = "";
@@ -119,6 +147,29 @@ const KanbanBoard = ({ projectID }) => {
     if (e.key === "Enter") {
       const val = e.target.value;
       setCurrentDate(val);
+
+      if (currentTitle.trim() !== "" && selectedColumn) {
+        const item = {
+          id: createGuidId(),
+          title: currentTitle,
+          date: val,
+        };
+
+        const newColumns = { ...columns };
+        newColumns[selectedColumn].items.push(item);
+
+        setColumns(newColumns);
+        setShowForm(false);
+        setCurrentTitle("");
+        setCurrentDate("");
+        console.log("Saving to database:", item);
+
+        const tasksRef = ref(
+          database,
+          `users/Elissa/projects/${projectID}/tasks/${selectedColumn}/items`
+        );
+        set(tasksRef, newColumns[selectedColumn].items);
+      }
     }
   };
 
@@ -161,6 +212,9 @@ const KanbanBoard = ({ projectID }) => {
                                     index={iIndex}
                                     columnName={columnName}
                                     projectID={projectID}
+                                    onDelete={() =>
+                                      handleTaskDelete(columnName, item.id)
+                                    }
                                     className="m-3"
                                   />
                                 );

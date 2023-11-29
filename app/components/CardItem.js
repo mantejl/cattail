@@ -1,37 +1,14 @@
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { ref as dbRef, set } from "firebase/database";
 import { database } from "../firebase";
-import { ref as dbRef, onValue, set } from "firebase/database";
 
-function CardItem({ data, index, columnName, projectID }) {
-  const [title, setTitle] = useState(data.title);
-  const [date, setDate] = useState(data.date || "");
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-
-    const taskRef = dbRef(
-      database,
-      `users/Elissa/projects/${projectID}/tasks/${columnName}/${data.id}/title`
-    );
-    set(taskRef, e.target.value);
+function CardItem({ data, index, columnName, projectID, onDelete }) {
+  const handleDelete = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onDelete(); // Call the onDelete function passed as a prop
   };
-
-  const handleDateChange = (e) => {
-    setDate(e.target.value);
-    const taskRef = dbRef(
-      database,
-      `users/Elissa/projects/${projectID}/tasks/${columnName}/${data.id}/date`
-    );
-    set(taskRef, e.target.value);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      data.date = date;
-    }
-  };
-
   return (
     <Draggable index={index} draggableId={data.id.toString()}>
       {(provided) => (
@@ -39,28 +16,19 @@ function CardItem({ data, index, columnName, projectID }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="bg-white rounded-md p-1 m-1 mt-0 last:mb-0 text-black border border-gray-300" // Apply the border class
+          className="bg-white rounded-md p-1 m-1 mt-0 last:mb-0 text-black border border-gray-300 relative"
         >
           <div className="mb-1 pb-2">
-            <textarea
-              type="text"
-              placeholder="Task title"
-              value={title}
-              onChange={handleTitleChange}
-              className="w-full p-1 text-sm border-none outline-none resize-none"
-              style={{ height: "30px" }}
-            />
+            <div
+              className={`w-full p-1 text-sm border-none outline-none resize-none`}
+              style={{ minHeight: "30px", whiteSpace: "pre-line" }}
+            >
+              {data.title}
+            </div>
 
-            <input
-              type="text"
-              placeholder="Task date"
-              value={date}
-              onChange={handleDateChange}
-              onKeyPress={handleKeyPress}
-              className="w-full p-1 text-xs text-gray-400 border-none outline-none resize-none"
-            />
+            <div className="w-full p-1 text-xs text-gray-400">{data.date}</div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <div className="flex space-x-2 items-center">
               <span className="flex space-x-1 items-center text-black">
                 <span>{data.chat}</span>
@@ -69,6 +37,12 @@ function CardItem({ data, index, columnName, projectID }) {
                 <span>{data.attachment}</span>
               </span>
             </div>
+            <button
+              className="text-red-500 text-xs cursor-pointer"
+              onClick={(e) => handleDelete(e)}
+            >
+              x
+            </button>
           </div>
         </div>
       )}
