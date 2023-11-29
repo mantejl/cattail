@@ -46,9 +46,11 @@ const NavBar = () => {
                 marginBottom: "8px",
                 textAlign: "left",
                 paddingLeft: "28px",
+                fontWeight: "bold",
+                fontSize: "22px",
               }}
             >
-              ELISSA MARTIAL
+              Elissa Martial
             </Sidebar.Item>
 
             <Sidebar.Item
@@ -67,14 +69,6 @@ const NavBar = () => {
               Requests
             </Sidebar.Item>
 
-            <Sidebar.Item
-              href="#"
-              icon={HiArrowSmRight}
-              style={{ marginBottom: "8px", textAlign: "left" }}
-            >
-              New Project
-            </Sidebar.Item>
-
             <Sidebar.Collapse
               icon={HiShoppingBag}
               label="Projects"
@@ -90,22 +84,6 @@ const NavBar = () => {
                 </Link>
               ))}
             </Sidebar.Collapse>
-
-            <Sidebar.Item
-              href="#"
-              icon={HiInbox}
-              style={{ marginBottom: "8px", textAlign: "left" }}
-            >
-              Archived
-            </Sidebar.Item>
-
-            <Sidebar.Item
-              href="#"
-              icon={HiUser}
-              style={{ marginBottom: "8px", textAlign: "left" }}
-            >
-              Import
-            </Sidebar.Item>
 
             <Sidebar.Item
               href="#"
