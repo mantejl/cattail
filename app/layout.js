@@ -7,7 +7,6 @@ export default function RootLayout({ children }) {
     <html>
       <body>
         <div className="flex">
-          <NavBar />
           <main className="flex-1 pt-8">{children}</main>
         </div>
       </body>

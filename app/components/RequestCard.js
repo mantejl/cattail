@@ -127,15 +127,42 @@ const RequestCard = ({
 
       <Modal show={isModalOpen} onClose={closeModal}>
         <Modal.Body>
-          <p>Project Title: {title}</p>
-          <p>Requested By: {requestedBy}</p>
-          <p>Email: {email}</p>
-          <p>Deadline: {deadline}</p>
-          <p>Background Type: {backgroundType}</p>
-          <p>Character Framing: {characterFraming}</p>
-          <p>Deadline: {deadline}</p>
-          <p>Details: {details}</p>
-          <p>Number of Characters: {numberOfCharacters}</p>
+          <h3 className="text-xl font-bold mb-4">Project Details</h3>
+          <form>
+            <div className="mb-2">
+              <label className="text-gray-500">Project Title:</label>
+              <p>{title}</p>
+            </div>
+            <div className="mb-2">
+              <label className="text-gray-500">Requested By:</label>
+              <p>{requestedBy}</p>
+            </div>
+            <div className="mb-2">
+              <label className="text-gray-500">Email:</label>
+              <p>{email}</p>
+            </div>
+            <div className="mb-2">
+              <label className="text-gray-500">Deadline:</label>
+              <p>{deadline}</p>
+            </div>
+            <div className="mb-2">
+              <label className="text-gray-500">Background Type:</label>
+              <p>{backgroundType}</p>
+            </div>
+            <div className="mb-2">
+              <label className="text-gray-500">Character Framing:</label>
+              <p>{characterFraming}</p>
+            </div>
+            <div className="mb-2">
+              <label className="text-gray-500">Details:</label>
+              <p>{details}</p>
+            </div>
+            <div className="mb-2">
+              <label className="text-gray-500">Number of Characters:</label>
+              <p>{numberOfCharacters}</p>
+            </div>
+          </form>
+
           <div className="mt-4">
             <h5 className="text-lg font-semibold mb-2">Images</h5>
             <div className="flex space-x-4">
@@ -169,9 +196,14 @@ const RequestCard = ({
               </div>
             )}
           </div>
-          <Button onClick={closeModal} className="mt-4">
+          <Button
+              onClick={closeModal}
+              className="mt-4"
+              style={{ backgroundColor: '#C3500F', color: 'white' }}
+            >
             Close
           </Button>
+          
         </Modal.Body>
       </Modal>
 
