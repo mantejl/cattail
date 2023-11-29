@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+
 import {
   Button,
   Checkbox,
@@ -15,6 +16,7 @@ import {
 
 import { database, stg } from "../firebase";
 import { ref, push, set, onValue, get } from "firebase/database";
+import { useRouter } from "next/navigation";
 
 import {
   ref as storageRef,
@@ -25,6 +27,7 @@ import {
 
 export default function IntakeForm() {
   const [key, setNewKey] = useState(null);
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -53,6 +56,7 @@ export default function IntakeForm() {
     const theNewKey = pushRef.key;
 
     setNewKey(theNewKey);
+    router.push("/signup");
   };
 
   const handleInputChange = (id, value) => {
@@ -98,11 +102,13 @@ export default function IntakeForm() {
   };
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-4 text-center">
+    <div
+      style={{ backgroundImage: `url('/background.png')` }}
+      className="bg-center max-h-screen bg-cover flex flex-col items-center justify-center min-h-screen overflow-y-auto pt-80"
+    >
+      <h1 className="text-3xl font-bold tracking-tight text-#C3500F mb-4 text-center mt-40">
         Elissa Martial's Character Design Form
       </h1>
-
       <form
         className="max-w-md mx-auto flex flex-col gap-4"
         onSubmit={handleSubmit}
@@ -313,7 +319,7 @@ export default function IntakeForm() {
           />
         </div>
 
-        <div id="fileUpload" className="max-w-md">
+        <div id="fileUpload" className="max-w-md orange">
           <div className="mb-2 block">
             <Label htmlFor="file" value="Upload file" />
           </div>
@@ -324,7 +330,12 @@ export default function IntakeForm() {
             onChange={(e) => handleFileUpload(e.target.files)}
           />
         </div>
-        <Button type="submit" disabled={formData.imagesUploading}>
+
+        <Button
+          type="submit"
+          style={{ backgroundColor: "#C3500F", color: "white" }}
+          disabled={formData.imagesUploading}
+        >
           Submit
         </Button>
       </form>

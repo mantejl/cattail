@@ -1,14 +1,13 @@
-'use client'
+"use client";
 
-// ... (your existing imports)
-import React, { useState } from 'react';
-import { Button, Card } from 'flowbite-react';
-import NavBar from '../components/NavBar';
-import KanbanBoard from '../components/KanbanBoard';
-import FileUpload from '../components/FileUpload';
-import Timeline from '../components/Timeline';
+import React, { useState } from "react";
+import { Button, Card } from "flowbite-react";
+import NavBar from "../components/NavBar";
+import KanbanBoard from "../components/KanbanBoard";
+import FileUpload from "../components/FileUpload";
+import Timeline from "../components/Timeline";
 
-export default function Profile() {
+export default function GeneralDashboard() {
   return (
     <div className="flex items-start gap-4 min-h-screen overflow-y-auto p-4">
       {/* Include the NavBar component here */}

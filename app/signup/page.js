@@ -1,14 +1,14 @@
-'use client'; 
-import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
-import { Button, Label, TextInput } from 'flowbite-react';
-import { useRouter } from 'next/navigation';
- 
+"use client";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { Button, Label, TextInput } from "flowbite-react";
+import { useRouter } from "next/navigation";
+
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordTwo, setPasswordTwo] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordTwo, setPasswordTwo] = useState("");
   const [error, setError] = useState(null);
   const router = useRouter();
 
@@ -19,14 +19,13 @@ const SignUp = () => {
     if (password === passwordTwo) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
-        console.log('Success. The user is created in Firebase');
-        router.push('/profile');
+        console.log("Success. The user is created in Firebase");
+        router.push("/thankyou");
       } catch (error) {
-        // An error occurred. Set error message to be displayed to the user
         setError(error.message);
       }
     } else {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
     }
   };
 
@@ -74,10 +73,14 @@ const SignUp = () => {
           {error && <p className="text-red-500">{error}</p>}
 
           <p className="text-sm text-gray-500">
-            Must be at least 8 characters, contain at least 1 uppercase letter, and 1 lowercase letter, and 1 number.
+            Must be at least 8 characters, contain at least 1 uppercase letter,
+            and 1 lowercase letter, and 1 number.
           </p>
 
-          <Button type="submit" style={{ backgroundColor: '#C3500F', color: 'white' }}>
+          <Button
+            type="submit"
+            style={{ backgroundColor: "#C3500F", color: "white" }}
+          >
             Create Account
           </Button>
         </form>

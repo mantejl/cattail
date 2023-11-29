@@ -36,12 +36,23 @@ const NavBar = () => {
   }, []);
 
   return (
-    <Card className="max-w-xs bg-white shadow-md rounded-md">
+    <Card className="max-w-xs bg-gray-100 shadow-md rounded-md p-4 h-screen">
       <Sidebar aria-label="Sidebar with multi-level dropdown example">
-        <Sidebar.Items style={{ color: "gray" }}>
+        <Sidebar.Items style={{ color: "gray", fontSize: "14px" }}>
           <Sidebar.ItemGroup>
             <Sidebar.Item
               href="#"
+              style={{
+                marginBottom: "8px",
+                textAlign: "left",
+                paddingLeft: "28px",
+              }}
+            >
+              ELISSA MARTIAL
+            </Sidebar.Item>
+
+            <Sidebar.Item
+              href="/generaldashboard"
               icon={HiChartPie}
               style={{ marginBottom: "8px", textAlign: "left" }}
             >
@@ -49,7 +60,7 @@ const NavBar = () => {
             </Sidebar.Item>
 
             <Sidebar.Item
-              href="#"
+              href="/requests"
               icon={HiInbox}
               style={{ marginBottom: "8px", textAlign: "left" }}
             >

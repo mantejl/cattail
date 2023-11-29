@@ -80,47 +80,67 @@ const RequestCard = ({
 
   return (
     <Card className="max-w-md p-4 bg-white shadow-md rounded-md">
-      <p className="text-gray-500 font-normal text-sm mb-2">{timestamp}</p>
-      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <h5 className="text-2xl font-bold text-center tracking-tight text-gray-900 dark:text-white">
         {title}
       </h5>
-      <div className="text-gray-500 font-normal text-sm mb-2">REQUESTED BY</div>
+      <div className="text-gray-500 text-center font-normal text-sm mb-2">
+        REQUESTED BY
+      </div>
       <div className="mb-2">
-        <p className="font-normal text-gray-700 dark:text-gray-400">
+        <p className="font-normal text-center text-gray-700 dark:text-gray-400">
           {requestedBy}
         </p>
-        <p className="font-normal text-gray-700 dark:text-gray-400">{email}</p>
+        <p className="font-normal text-center text-gray-700 dark:text-gray-400">
+          {email}
+        </p>
       </div>
       <div className="mb-1">
-        <p className="text-gray-500 font-normal text-sm mb-1">
+        <p className="text-gray-500 text-center font-normal text-sm mb-1">
           ESTIMATED PRICE
         </p>
-        <p className="font-normal text-gray-700 dark:text-gray-400">
+        <p className="font-normal text-center text-gray-700 dark:text-gray-400">
           {estimatedPrice}
         </p>
       </div>
       <div className="flex mt-4">
         <Button
-          className="mr-2"
-          style={{ backgroundColor: "orange" }}
+          className="m-2"
+          style={{ backgroundColor: "#C3500F" }}
           onClick={handleAccept}
         >
           Accept
         </Button>
         <Button
+          className="m-2"
           style={{
-            color: "black",
+            color: "#C3500F",
+            border: "2px solid #C3500F",
             backgroundColor: "white",
-            border: "2px solid orange",
           }}
           onClick={handleReferral}
         >
           Refer
         </Button>
-        <Button onClick={openModal} className="mt-4">
+        <Button
+          onClick={openModal}
+          className="m-2"
+          style={{
+            color: "#C3500F",
+            border: "2px solid #C3500F",
+            backgroundColor: "white",
+          }}
+        >
           View Details
         </Button>
-        <Button onClick={handleDeleteRequest} className="mt-4">
+        <Button
+          onClick={handleDeleteRequest}
+          className="m-2"
+          style={{
+            color: "#C3500F",
+            border: "2px solid #C3500F",
+            backgroundColor: "white",
+          }}
+        >
           Decline
         </Button>
       </div>
