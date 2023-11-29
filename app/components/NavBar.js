@@ -36,7 +36,7 @@ const NavBar = () => {
   }, []);
 
   return (
-    <Card className="max-w-xs bg-gray-100 shadow-md rounded-md p-4 h-screen">
+    <Card className="max-w-xs bg-gray-50 shadow-md rounded-md p-4 h-screen">
       <Sidebar aria-label="Sidebar with multi-level dropdown example">
         <Sidebar.Items style={{ color: "gray", fontSize: "14px" }}>
           <Sidebar.ItemGroup>
@@ -47,7 +47,7 @@ const NavBar = () => {
                 textAlign: "left",
                 paddingLeft: "28px",
                 fontWeight: "bold",
-                fontSize: "22px",
+                fontSize: "24px", // Increased font size
               }}
             >
               Elissa Martial
@@ -56,7 +56,7 @@ const NavBar = () => {
             <Sidebar.Item
               href="/generaldashboard"
               icon={HiChartPie}
-              style={{ marginBottom: "8px", textAlign: "left" }}
+              style={{ marginBottom: "8px", textAlign: "left", fontSize: "18px" }}
             >
               Dashboard
             </Sidebar.Item>
@@ -64,7 +64,7 @@ const NavBar = () => {
             <Sidebar.Item
               href="/requests"
               icon={HiInbox}
-              style={{ marginBottom: "8px", textAlign: "left" }}
+              style={{ marginBottom: "8px", textAlign: "left", fontSize: "18px" }}
             >
               Requests
             </Sidebar.Item>
@@ -77,7 +77,7 @@ const NavBar = () => {
               {projects.map((project, index) => (
                 <Link key={project.id} href={`/projects/${project.id}`}>
                   <Sidebar.Item
-                    style={{ textAlign: "left", cursor: "pointer" }}
+                    style={{ textAlign: "left", cursor: "pointer", fontSize: "18px" }}
                   >
                     Project {index + 1}
                   </Sidebar.Item>
@@ -88,7 +88,7 @@ const NavBar = () => {
             <Sidebar.Item
               href="#"
               icon={HiArrowSmRight}
-              style={{ marginBottom: "8px", textAlign: "left" }}
+              style={{ marginBottom: "8px", textAlign: "left", fontSize: "18px" }}
             >
               Help
             </Sidebar.Item>
