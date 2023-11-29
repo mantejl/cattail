@@ -1,9 +1,11 @@
 "use client";
 
+import CardItem from "./CardItem";
 import React, { useEffect, useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/outline";
-import CardItem from "./CardItem";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { database } from "../firebase";
+import { ref as dbRef, onValue, set } from "firebase/database";
 
 function createGuidId() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -13,13 +15,13 @@ function createGuidId() {
   });
 }
 
-const KanbanBoard = () => {
+const KanbanBoard = ({ projectID }) => {
   const [columns, setColumns] = useState({
-    todo: {
+    toDo: {
       name: "To Do",
       items: [],
     },
-    doing: {
+    inProgress: {
       name: "In Progress",
       items: [],
     },
@@ -28,6 +30,27 @@ const KanbanBoard = () => {
       items: [],
     },
   });
+
+  useEffect(() => {
+    const tasksRef = dbRef(
+      database,
+      `users/Elissa/projects/${projectID}/tasks`
+    );
+    const unsubscribe = onValue(tasksRef, (snapshot) => {
+      const tasksData = snapshot.val() || {
+        toDo: [],
+        inProgress: [],
+        done: [],
+      };
+      setColumns({
+        toDo: { name: "To Do", items: tasksData.toDo || [] },
+        inProgress: { name: "In Progress", items: tasksData.inProgress || [] },
+        done: { name: "Done", items: tasksData.done || [] },
+      });
+    });
+
+    return () => unsubscribe();
+  }, [projectID]);
 
   const [selectedColumn, setSelectedColumn] = useState("");
   const [ready, setReady] = useState(false);
@@ -53,6 +76,11 @@ const KanbanBoard = () => {
     );
 
     setColumns(newColumns);
+    const tasksRef = dbRef(
+      database,
+      `users/Elissa/projects/${projectID}/tasks`
+    );
+    set(tasksRef, columns);
   };
 
   const onTextAreaKeyPress = (e) => {
@@ -74,8 +102,15 @@ const KanbanBoard = () => {
 
       setColumns(newColumns);
       setShowForm(false);
-      setCurrentTitle(""); // Reset currentTitle after adding the task
-      setCurrentDate(""); // Reset currentDate after adding the task
+      setCurrentTitle("");
+      setCurrentDate("");
+      console.log("Saving to database:", item);
+
+      const tasksRef = dbRef(
+        database,
+        `users/Elissa/projects/${projectID}/tasks/${selectedColumn}`
+      );
+      set(tasksRef, newColumns[selectedColumn].items);
       e.target.value = "";
     }
   };
@@ -124,6 +159,8 @@ const KanbanBoard = () => {
                                     key={item.id}
                                     data={item}
                                     index={iIndex}
+                                    columnName={columnName}
+                                    projectID={projectID}
                                     className="m-3"
                                   />
                                 );

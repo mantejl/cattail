@@ -1,19 +1,34 @@
 import { useState, useEffect } from "react";
 import { stg } from "../firebase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import { database } from "../firebase";
+import { ref as dbRef, get, set, onValue } from "firebase/database";
 
-const Moodboard = () => {
+const Moodboard = ({ projectID }) => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
 
-  const imageListRef = ref(stg, "images/");
+  const imageListRef = ref(stg, `/images/`);
+  const projectImageUrlsRef = dbRef(
+    database,
+    `users/Elissa/projects/${projectID}/imageUrls`
+  );
 
   const uploadImage = () => {
     if (imageUpload == null) return;
-    const imageRef = ref(stg, `images/${imageUpload.name}`);
+    const imageRef = ref(
+      stg,
+      `projects/${projectID}/images/${imageUpload.name}`
+    );
+
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         setImageList((prev) => [...prev, url]);
+
+        get(projectImageUrlsRef).then((snapshot) => {
+          const currentImageUrls = snapshot.val() || [];
+          set(projectImageUrlsRef, [...currentImageUrls, url]);
+        });
       });
     });
   };
@@ -26,6 +41,7 @@ const Moodboard = () => {
 
       Promise.all(promises).then((urls) => {
         setImageList(urls);
+        set(projectImageUrlsRef, urls);
       });
     });
   }, []);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Checkbox,
@@ -13,11 +13,18 @@ import {
   FileInput,
 } from "flowbite-react";
 
-import { database } from "../firebase";
+import { database, stg } from "../firebase";
 import { ref, push, set, onValue, get } from "firebase/database";
 
+import {
+  ref as storageRef,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+} from "firebase/storage";
+
 export default function IntakeForm() {
-  // State to manage form data
+  const [key, setNewKey] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -29,30 +36,54 @@ export default function IntakeForm() {
     budget: "",
     deadline: "",
     details: "",
+    images: [],
   });
+
+  useEffect(() => {
+    console.log(key);
+  }, [key]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
-    // Add logic here to send the form data to Firebase
+
     const requestsRef = ref(database, "users/Elissa/requests");
-    const snapshot = await get(requestsRef);
-    const requestCount = snapshot.exists()
-      ? Object.keys(snapshot.val()).length
-      : 0;
-    const newRequestKey = `request_${requestCount + 1}`;
-    const newRequestRef = ref(
-      database,
-      `users/Elissa/requests/${newRequestKey}`
-    );
-    set(newRequestRef, formData);
+    const pushRef = push(requestsRef, formData);
+    const theNewKey = pushRef.key;
+
+    setNewKey(theNewKey);
   };
 
-  // Handler for updating form data on input change
   const handleInputChange = (id, value) => {
     setFormData((prevData) => ({
       ...prevData,
       [id]: value,
+    }));
+  };
+
+  const handleFileUpload = async (currentKey, files) => {
+    const storageRefPath = "images/";
+    const imagesRef = storageRef(stg, storageRefPath);
+
+    const uploadedURLs = await Promise.all(
+      Array.from(files).map(async (file) => {
+        const imageRef = storageRef(imagesRef, file.name);
+        try {
+          const snapshot = await uploadBytes(imageRef, file);
+          const url = await getDownloadURL(snapshot.ref);
+          console.log(`File uploaded: ${file.name}`, url);
+          return url;
+        } catch (error) {
+          console.error(`Error uploading file ${file.name}:`, error);
+          return null;
+        }
+      })
+    );
+
+    console.log(uploadedURLs);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...uploadedURLs],
     }));
   };
 
@@ -245,7 +276,6 @@ export default function IntakeForm() {
           </div>
         </fieldset>
 
-        {/* Estimated Deadline */}
         <div>
           <div className="mb-2 block">
             <Label htmlFor="deadline" value="Estimated Deadline" />
@@ -279,8 +309,9 @@ export default function IntakeForm() {
           </div>
           <FileInput
             id="file"
+            multiple
             helperText="Upload at least 3 reference images per character and 3 for the background (if applicable)"
-            onChange={(e) => handleInputChange("file", e.target.files[0])}
+            onChange={(e) => handleFileUpload(key, e.target.files)}
           />
         </div>
         <Button type="submit">Submit</Button>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Button, Card, Modal, TextInput } from "flowbite-react";
+import { database } from "../firebase";
+import { ref, get, set, onValue, push } from "firebase/database";
 
 const RequestCard = ({
   timestamp,
@@ -12,16 +14,23 @@ const RequestCard = ({
   deadline,
   numberOfCharacters,
   details,
+  images,
   onRequestRefer,
   onDeleteRequest,
+  onRequestAccept,
+  requestKey,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
   const [referralEmail, setReferralEmail] = useState("");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [numberOfProjects, setNumberOfProjects] = useState(0);
 
   const openModal = () => {
     setIsModalOpen(true);
   };
+
+  console.log("key is ", requestKey);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -33,7 +42,7 @@ const RequestCard = ({
 
   const closeReferralModal = () => {
     setIsReferralModalOpen(false);
-    setReferralEmail(""); // Reset the email input
+    setReferralEmail("");
   };
 
   const handleReferral = () => {
@@ -41,15 +50,31 @@ const RequestCard = ({
   };
 
   const handleReferralSubmit = () => {
-    // Perform validation on the email (e.g., format validation)
-    // If valid, perform the referral and update the UI and backend
     onRequestRefer(referralEmail);
     closeReferralModal();
   };
 
   const handleDeleteRequest = () => {
-    // Perform deletion logic (both UI and backend)
     onDeleteRequest();
+  };
+
+  const handleAccept = async () => {
+    const projectsRef = ref(database, `users/Elissa/projects/${requestKey}`);
+    const snapshot = await get(projectsRef);
+    const newProjectData = {
+      tasks: {
+        toDo: [],
+        inProgress: [],
+        done: [],
+      },
+      imageUrls: images,
+      files: [],
+    };
+
+    await set(projectsRef, newProjectData);
+    console.log("Project created successfully");
+
+    onRequestAccept();
   };
 
   return (
@@ -74,7 +99,11 @@ const RequestCard = ({
         </p>
       </div>
       <div className="flex mt-4">
-        <Button className="mr-2" style={{ backgroundColor: "orange" }}>
+        <Button
+          className="mr-2"
+          style={{ backgroundColor: "orange" }}
+          onClick={handleAccept}
+        >
           Accept
         </Button>
         <Button
@@ -91,7 +120,7 @@ const RequestCard = ({
           View Details
         </Button>
         <Button onClick={handleDeleteRequest} className="mt-4">
-          Delete
+          Decline
         </Button>
       </div>
 
@@ -106,13 +135,50 @@ const RequestCard = ({
           <p>Deadline: {deadline}</p>
           <p>Details: {details}</p>
           <p>Number of Characters: {numberOfCharacters}</p>
+          <div className="mt-4">
+            <h5 className="text-lg font-semibold mb-2">Images</h5>
+            <div className="flex space-x-4">
+              {images.map((imageUrl, index) => (
+                <img
+                  key={index}
+                  src={imageUrl}
+                  alt={`Image ${index + 1}`}
+                  className={`cursor-pointer ${
+                    index === currentImageIndex
+                      ? "border-2 border-blue-500"
+                      : ""
+                  }`}
+                  style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                  onClick={() => setCurrentImageIndex(index)}
+                />
+              ))}
+            </div>
+            {images.length > 0 && (
+              <div className="mt-4">
+                <img
+                  src={images[currentImageIndex]}
+                  alt={`Current Image`}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    maxHeight: "400px",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <Button onClick={closeModal} className="mt-4">
             Close
           </Button>
         </Modal.Body>
       </Modal>
 
-      <Modal show={isReferralModalOpen} onClose={closeReferralModal}>
+      <Modal
+        dismissible
+        show={isReferralModalOpen}
+        onClose={closeReferralModal}
+      >
         <Modal.Body>
           <p>
             Please enter the email of the person you want to refer this project

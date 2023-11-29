@@ -37,6 +37,15 @@ const Requests = () => {
     await set(requestRef, null);
   };
 
+  const onRequestAccept = async (requestId) => {
+    setRequests((prevRequests) =>
+      prevRequests.filter((request) => request.id !== requestId)
+    );
+
+    const requestRef = ref(database, `users/Elissa/requests/${requestId}`);
+    await set(requestRef, null);
+  };
+
   const handleDeleteRequest = async (requestId) => {
     console.log(`Deleting project with ID ${requestId}`);
 
@@ -58,6 +67,7 @@ const Requests = () => {
         {requests.map((request) => (
           <RequestCard
             key={request.id}
+            onRequestAccept={() => onRequestAccept(request.id)}
             onRequestRefer={(referralEmail) =>
               handleRequestRefer(referralEmail, request.id)
             }
@@ -73,6 +83,8 @@ const Requests = () => {
             deadline={request.deadline}
             numberOfCharacters={request.numberOfCharacters}
             details={request.details}
+            images={request.images}
+            requestKey={request.id}
           />
         ))}
       </div>

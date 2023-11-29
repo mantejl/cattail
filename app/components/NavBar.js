@@ -1,8 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Sidebar, Card } from "flowbite-react";
 import { BiBuoy } from "react-icons/bi";
+import Link from "next/link";
+
 import {
   HiArrowSmRight,
   HiChartPie,
@@ -13,7 +15,26 @@ import {
   HiViewBoards,
 } from "react-icons/hi";
 
+import { database } from "../firebase";
+import { ref, get } from "firebase/database";
+
 const NavBar = () => {
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const projectsRef = ref(database, "users/Elissa/projects");
+
+    get(projectsRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        const projectData = snapshot.val();
+        const projectList = Object.keys(projectData).map((projectId) => ({
+          id: projectId,
+        }));
+        setProjects(projectList);
+      }
+    });
+  }, []);
+
   return (
     <Card className="max-w-xs bg-white shadow-md rounded-md">
       <Sidebar aria-label="Sidebar with multi-level dropdown example">
@@ -45,52 +66,18 @@ const NavBar = () => {
 
             <Sidebar.Collapse
               icon={HiShoppingBag}
-              label="Pinned"
-              style={{ marginBottom: "8px", paddingLeft: "90px" }}
-            >
-              <Sidebar.Item
-                href="#"
-                style={{ paddingLeft: "45px", textAlign: "left" }}
-              >
-                Project 1
-              </Sidebar.Item>
-              <Sidebar.Item
-                href="#"
-                style={{ paddingLeft: "45px", textAlign: "left" }}
-              >
-                Project 2
-              </Sidebar.Item>
-            </Sidebar.Collapse>
-
-            <Sidebar.Collapse
-              icon={HiShoppingBag}
               label="Projects"
-              style={{ marginBottom: "8px", paddingLeft: "87px" }}
+              style={{ marginBottom: "8px" }}
             >
-              <Sidebar.Item
-                href="#"
-                style={{ paddingLeft: "45px", textAlign: "left" }}
-              >
-                Project 1
-              </Sidebar.Item>
-              <Sidebar.Item
-                href="#"
-                style={{ paddingLeft: "45px", textAlign: "left" }}
-              >
-                Project 2
-              </Sidebar.Item>
-              <Sidebar.Item
-                href="#"
-                style={{ paddingLeft: "45px", textAlign: "left" }}
-              >
-                Project 3
-              </Sidebar.Item>
-              <Sidebar.Item
-                href="#"
-                style={{ paddingLeft: "45px", textAlign: "left" }}
-              >
-                Project 4
-              </Sidebar.Item>
+              {projects.map((project, index) => (
+                <Link key={project.id} href={`/projects/${project.id}`}>
+                  <Sidebar.Item
+                    style={{ textAlign: "left", cursor: "pointer" }}
+                  >
+                    Project {index + 1}
+                  </Sidebar.Item>
+                </Link>
+              ))}
             </Sidebar.Collapse>
 
             <Sidebar.Item
