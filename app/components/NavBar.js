@@ -87,7 +87,7 @@ const NavBar = () => {
 
             <Sidebar.Item
               href="#"
-              icon={HiShoppingBag}
+              icon={HiArrowSmRight}
               style={{ marginBottom: "8px", textAlign: "left" }}
             >
               Help
