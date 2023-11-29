@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import {
   Button,
+  Card, 
   Checkbox,
   Label,
   TextInput,
@@ -102,54 +103,54 @@ export default function IntakeForm() {
   };
 
   return (
-    <div
-      style={{ backgroundImage: `url('/background.png')` }}
-      className="bg-center max-h-screen bg-cover flex flex-col items-center justify-center min-h-screen overflow-y-auto pt-80"
-    >
-      <h1 className="text-3xl font-bold tracking-tight text-#C3500F mb-4 text-center mt-40">
-        Elissa Martial's Character Design Form
-      </h1>
+    <div style={{ background: '#FAFAFA' }} className="flex flex-col items-center justify-center min-h-screen overflow-y-auto">
+    <h1 className="text-3xl font-bold tracking-tight text-#C3500F mb-4 text-center mt-8">
+    Elissa Martial's Character Design Form
+    </h1>
       <form
         className="max-w-md mx-auto flex flex-col gap-4"
         onSubmit={handleSubmit}
       >
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="firstName" value="First Name" />
+        <Card className="max-w-md p-4 bg-gray-100 shadow-md rounded-md">
+        <div className="basic-information-card">
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="firstName" value="First Name" />
+            </div>
+            <TextInput
+              id="firstName"
+              type="text"
+              placeholder="John"
+              required
+              onChange={(e) => handleInputChange("firstName", e.target.value)}
+            />
           </div>
-          <TextInput
-            id="firstName"
-            type="text"
-            placeholder="John"
-            required
-            onChange={(e) => handleInputChange("firstName", e.target.value)}
-          />
-        </div>
 
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="lastName" value="Last Name" />
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="lastName" value="Last Name" />
+            </div>
+            <TextInput
+              id="lastName"
+              type="text"
+              placeholder="Doe"
+              required
+              onChange={(e) => handleInputChange("lastName", e.target.value)}
+            />
           </div>
-          <TextInput
-            id="lastName"
-            type="text"
-            placeholder="Doe"
-            required
-            onChange={(e) => handleInputChange("lastName", e.target.value)}
-          />
-        </div>
 
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="title" value="Title of Project" />
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="title" value="Title of Project" />
+            </div>
+            <TextInput
+              id="title"
+              type="text"
+              placeholder="My Project"
+              required
+              onChange={(e) => handleInputChange("title", e.target.value)}
+            />
           </div>
-          <TextInput
-            id="title"
-            type="text"
-            placeholder="My Project"
-            required
-            onChange={(e) => handleInputChange("title", e.target.value)}
-          />
         </div>
 
         <div>
@@ -164,7 +165,10 @@ export default function IntakeForm() {
             onChange={(e) => handleInputChange("email", e.target.value)}
           />
         </div>
+        </Card>
 
+
+        <Card className="max-w-md p-4 bg-gray-100 shadow-md rounded-md">
         <div>
           <div className="mb-2 block">
             <Label htmlFor="characterFraming" value="Character Framing" />
@@ -330,6 +334,7 @@ export default function IntakeForm() {
             onChange={(e) => handleFileUpload(e.target.files)}
           />
         </div>
+        </Card>
 
         <Button
           type="submit"
