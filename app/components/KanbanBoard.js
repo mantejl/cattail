@@ -26,7 +26,7 @@ const KanbanBoard = ({ projectID }) => {
       items: [],
     },
     done: {
-      name: "Done",
+      name: "DONE",
       items: [],
     },
   });

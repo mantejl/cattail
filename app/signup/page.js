@@ -77,7 +77,9 @@ const SignUp = () => {
             Must be at least 8 characters, contain at least 1 uppercase letter, and 1 lowercase letter, and 1 number.
           </p>
 
-          <Button type="submit">Create Account</Button>
+          <Button type="submit" style={{ backgroundColor: '#C3500F', color: 'white' }}>
+            Create Account
+          </Button>
         </form>
       </div>
     </div>

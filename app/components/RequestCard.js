@@ -197,13 +197,12 @@ const RequestCard = ({
             )}
           </div>
           <Button
-              onClick={closeModal}
-              className="mt-4"
-              style={{ backgroundColor: '#C3500F', color: 'white' }}
-            >
+            onClick={closeModal}
+            className="mt-4"
+            style={{ backgroundColor: "#C3500F", color: "white" }}
+          >
             Close
           </Button>
-          
         </Modal.Body>
       </Modal>
 
