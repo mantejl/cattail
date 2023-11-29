@@ -2,37 +2,60 @@ import { useState, useEffect } from "react";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 import { stg } from "../firebase";
 import { DocumentIcon } from "@heroicons/react/outline";
+import { database } from "../firebase";
+import { runTransaction, ref as dbRef, get, set } from "firebase/database";
 
-const FileUpload = () => {
+const FileUpload = ({ projectID }) => {
   const [fileUpload, setFileUpload] = useState(null);
   const [fileUrls, setFileUrls] = useState([]);
 
-  const filesListRef = ref(stg, "files/");
+  const filesListRef = ref(stg, `files/${projectID}/`);
 
-  const uploadFile = () => {
+  const projectFileUrlsRef = dbRef(
+    database,
+    `users/Elissa/projects/${projectID}/fileUrls`
+  );
+
+  const sanitizeFileName = (fileName) => {
+    return fileName.replace(/[.#$/[\]]/g, "_");
+  };
+
+  const uploadFile = async () => {
     if (fileUpload == null) return;
-    const fileRef = ref(stg, `files/${fileUpload.name}`);
-    uploadBytes(fileRef, fileUpload).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        setFileUrls((prev) => [...prev, { url, name: fileUpload.name }]);
+    const sanitizedFileName = sanitizeFileName(fileUpload.name);
+    const fileRef = ref(stg, `files/${sanitizedFileName}`);
+
+    try {
+      const snapshot = await uploadBytes(fileRef, fileUpload);
+      const url = await getDownloadURL(snapshot.ref);
+
+      await runTransaction(projectFileUrlsRef, (currentData) => {
+        const newFileUrls = { ...currentData, [sanitizedFileName]: url };
+        return newFileUrls;
       });
-    });
+
+      const updatedSnapshot = await get(projectFileUrlsRef);
+      const updatedFileUrls = updatedSnapshot.val() || {};
+      setFileUrls(
+        Object.entries(updatedFileUrls).map(([name, url]) => ({ name, url }))
+      );
+    } catch (error) {
+      console.error("Error updating file URLs:", error);
+    }
   };
 
   useEffect(() => {
-    listAll(filesListRef).then((response) => {
-      const promises = response.items.map((item) =>
-        getDownloadURL(item).then((url) => ({
-          url,
-          name: item.name.split("/").pop(),
-        }))
-      );
-
-      Promise.all(promises).then((files) => {
-        setFileUrls(files);
+    get(projectFileUrlsRef)
+      .then((snapshot) => {
+        const fileUrls = snapshot.val() || {};
+        setFileUrls(
+          Object.entries(fileUrls).map(([name, url]) => ({ name, url }))
+        );
+      })
+      .catch((error) => {
+        console.error("Error fetching file URLs:", error);
       });
-    });
-  }, []);
+  }, [projectID]);
 
   return (
     <div>

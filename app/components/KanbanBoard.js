@@ -1,9 +1,11 @@
 "use client";
 
+import CardItem from "./CardItem";
 import React, { useEffect, useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/outline";
-import CardItem from "./CardItem";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { database } from "../firebase";
+import { ref, onValue, set } from "firebase/database";
 
 function createGuidId() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -13,13 +15,13 @@ function createGuidId() {
   });
 }
 
-const KanbanBoard = () => {
+const KanbanBoard = ({ projectID }) => {
   const [columns, setColumns] = useState({
-    todo: {
+    toDo: {
       name: "To Do",
       items: [],
     },
-    doing: {
+    inProgress: {
       name: "In Progress",
       items: [],
     },
@@ -28,6 +30,37 @@ const KanbanBoard = () => {
       items: [],
     },
   });
+
+  useEffect(() => {
+    const tasksRef = ref(database, `users/Elissa/projects/${projectID}/tasks`);
+
+    const unsubscribe = onValue(tasksRef, (snapshot) => {
+      const tasksData = snapshot.val() || {
+        toDo: [],
+        inProgress: [],
+        done: [],
+      };
+
+      if (tasksData) {
+        setColumns({
+          toDo: {
+            name: "To Do",
+            items: tasksData.toDo ? tasksData.toDo.items || [] : [],
+          },
+          inProgress: {
+            name: "In Progress",
+            items: tasksData.inProgress ? tasksData.inProgress.items || [] : [],
+          },
+          done: {
+            name: "Done",
+            items: tasksData.done ? tasksData.done.items || [] : [],
+          },
+        });
+      }
+    });
+
+    return () => unsubscribe();
+  }, [projectID]);
 
   const [selectedColumn, setSelectedColumn] = useState("");
   const [ready, setReady] = useState(false);
@@ -53,6 +86,29 @@ const KanbanBoard = () => {
     );
 
     setColumns(newColumns);
+    const tasksRef = ref(database, `users/Elissa/projects/${projectID}/tasks/`);
+    set(tasksRef, columns);
+  };
+
+  const handleTaskDelete = (columnName, taskId) => {
+    const updatedColumns = { ...columns };
+    const columnIndex = Object.keys(updatedColumns).findIndex(
+      (key) => key === columnName
+    );
+
+    updatedColumns[columnName].items = updatedColumns[columnName].items.filter(
+      (item) => item.id !== taskId
+    );
+
+    setColumns(updatedColumns);
+
+    const tasksRef = ref(
+      database,
+      `users/Elissa/projects/${projectID}/tasks/${columnName}/items`
+    );
+
+    // Set the updated array of items
+    set(tasksRef, updatedColumns[columnName].items);
   };
 
   const onTextAreaKeyPress = (e) => {
@@ -74,8 +130,15 @@ const KanbanBoard = () => {
 
       setColumns(newColumns);
       setShowForm(false);
-      setCurrentTitle(""); // Reset currentTitle after adding the task
-      setCurrentDate(""); // Reset currentDate after adding the task
+      setCurrentTitle("");
+      setCurrentDate("");
+      console.log("Saving to database:", item);
+
+      const tasksRef = ref(
+        database,
+        `users/Elissa/projects/${projectID}/tasks/${selectedColumn}/items`
+      );
+      set(tasksRef, newColumns[selectedColumn].items);
       e.target.value = "";
     }
   };
@@ -84,6 +147,29 @@ const KanbanBoard = () => {
     if (e.key === "Enter") {
       const val = e.target.value;
       setCurrentDate(val);
+
+      if (currentTitle.trim() !== "" && selectedColumn) {
+        const item = {
+          id: createGuidId(),
+          title: currentTitle,
+          date: val,
+        };
+
+        const newColumns = { ...columns };
+        newColumns[selectedColumn].items.push(item);
+
+        setColumns(newColumns);
+        setShowForm(false);
+        setCurrentTitle("");
+        setCurrentDate("");
+        console.log("Saving to database:", item);
+
+        const tasksRef = ref(
+          database,
+          `users/Elissa/projects/${projectID}/tasks/${selectedColumn}/items`
+        );
+        set(tasksRef, newColumns[selectedColumn].items);
+      }
     }
   };
 
@@ -124,6 +210,11 @@ const KanbanBoard = () => {
                                     key={item.id}
                                     data={item}
                                     index={iIndex}
+                                    columnName={columnName}
+                                    projectID={projectID}
+                                    onDelete={() =>
+                                      handleTaskDelete(columnName, item.id)
+                                    }
                                     className="m-3"
                                   />
                                 );
