@@ -2,14 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiMessageSquare, FiShare, FiEdit } from "react-icons/fi";
+import { FiMessageSquare, FiShare, FiEdit, FiTrash } from "react-icons/fi";
 import { Card } from "flowbite-react";
 import NavBar from "../../components/NavBar";
 import KanbanBoard from "../../components/KanbanBoard";
 import FileUpload from "../../components/FileUpload";
 import Moodboard from "../../components/Moodboard";
 import { database } from "../../firebase";
-import { ref, get } from "firebase/database";
+import { ref, get, remove } from "firebase/database";
 
 export default function ProjectPage({ params }) {
   const router = useRouter();
@@ -35,6 +35,16 @@ export default function ProjectPage({ params }) {
     fetchProjectTitle();
   }, [projectID, projectTitleRef]);
 
+  const handleDeleteProject = async () => {
+    try {
+      const projectRef = ref(database, `users/Elissa/projects/${projectID}`);
+      await remove(projectRef);
+      router.push("/generaldashboard");
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+
   if (projectTitle === null) {
     return <div>Loading...</div>;
   }
@@ -56,6 +66,9 @@ export default function ProjectPage({ params }) {
           </button>
           <button style={{ color: "#c3500f" }}>
             <FiEdit size={24} />
+          </button>
+          <button onClick={handleDeleteProject}>
+            <FiTrash size={24} style={{ color: "#c3500f" }} />
           </button>
         </div>
 

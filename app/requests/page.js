@@ -5,9 +5,11 @@ import RequestCard from "../components/RequestCard";
 import { ref, get, set, onValue } from "firebase/database";
 import { database } from "../firebase";
 import NavBar from "../components/NavBar";
+import { useRouter } from "next/navigation";
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const requestsRef = ref(database, "users/Elissa/requests");
@@ -45,6 +47,8 @@ const Requests = () => {
 
     const requestRef = ref(database, `users/Elissa/requests/${requestId}`);
     await set(requestRef, null);
+
+    router.push(`/projects/${requestId}`);
   };
 
   const handleDeleteRequest = async (requestId) => {
