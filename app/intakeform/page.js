@@ -332,6 +332,7 @@ export default function IntakeForm() {
             <FileInput
               id="file"
               multiple
+              required
               helperText="Upload at least 3 reference images per character and 3 for the background (if applicable)"
               onChange={(e) => handleFileUpload(e.target.files)}
             />
