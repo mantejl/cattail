@@ -342,6 +342,7 @@ export default function IntakeForm() {
           type="submit"
           style={{ backgroundColor: "#C3500F", color: "white" }}
           disabled={formData.imagesUploading}
+          className="mb-10"
         >
           Submit
         </Button>

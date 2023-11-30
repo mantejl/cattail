@@ -9,13 +9,13 @@ import Timeline from "../components/Timeline";
 
 export default function GeneralDashboard() {
   return (
-    <div className="flex items-start gap-4 min-h-screen overflow-y-auto p-4">
-      {/* Include the NavBar component here */}
+    <div className="flex items-start gap-4 min-h-screen overflow-y-auto p-4 ">
       <NavBar />
 
       <div>
-        {/* Welcome Back Header */}
-        <h2 className="text-2xl font-semibold mb-6">Welcome Back, Elissa</h2>
+        <h2 className="text-2xl font-semibold mb-6 mt-10">
+          Welcome Back, Elissa
+        </h2>
 
         {/* Welcome Card */}
         <Card className="max-w-lg p-2 bg-white shadow-md rounded-md">
@@ -60,7 +60,7 @@ export default function GeneralDashboard() {
 
       <div>
         {/* Kanban Board */}
-        <Card className="p-4 mt-4">
+        <Card className="p-4 mt-8">
           <h2 className="text-2xl font-semibold mb-4">Kanban Board</h2>
           <KanbanBoard />
         </Card>

@@ -39,6 +39,7 @@ const FileUpload = ({ projectID }) => {
       setFileUrls(
         Object.entries(updatedFileUrls).map(([name, url]) => ({ name, url }))
       );
+      setFileUpload(null);
     } catch (error) {
       console.error("Error updating file URLs:", error);
     }
@@ -60,19 +61,80 @@ const FileUpload = ({ projectID }) => {
   return (
     <div>
       <div>
-        <input
-          type="file"
-          onChange={(event) => {
-            setFileUpload(event.target.files[0]);
-          }}
-        />
-        <button onClick={uploadFile}> Upload File</button>
+        <style jsx>{`
+          .custom-file-upload {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border: 2px solid white;
+            color: white;
+            border-radius: 15px;
+            background-color: #c3500f;
+          }
+
+          .custom-file-upload input {
+            display: none;
+          }
+        `}</style>
+
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <label
+            htmlFor="fileInput"
+            className="custom-file-upload"
+            style={{ marginRight: "10px" }}
+          >
+            <span>Choose a file</span>
+            <input
+              type="file"
+              id="fileInput"
+              onChange={(event) => {
+                setFileUpload(event.target.files[0]);
+              }}
+              style={{ display: "none" }}
+            />
+          </label>
+          {fileUpload && (
+            <p
+              style={{
+                marginRight: "10px",
+                fontWeight: "bold",
+                color: "black",
+              }}
+            >
+              Selected file: {fileUpload.name}
+            </p>
+          )}
+          <button
+            onClick={uploadFile}
+            style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "8px 12px",
+              backgroundColor: "#C3500F",
+              color: "white",
+              borderRadius: "15px",
+              marginTop: "2px",
+            }}
+          >
+            Upload File
+          </button>
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         {fileUrls.map((file, index) => (
           <div key={index} className="flex items-center space-x-2 pt-6">
-            <DocumentIcon className="w-4 h-4" />
-            <a href={file.url} target="_blank" rel="noopener noreferrer">
+            <DocumentIcon className="w-10 h-10" />
+            <a
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+              }}
+            >
               {file.name}
             </a>
           </div>

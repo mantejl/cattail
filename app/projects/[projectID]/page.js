@@ -40,18 +40,21 @@ export default function ProjectPage({ params }) {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-8 bg-gray-100">
+    <div className="grid grid-cols-4 gap-8">
       <div className="col-span-1">
         <NavBar />
       </div>
 
       <div className="col-span-3 pr-20">
         <div className="absolute top-14 right-4 p-4 flex items-center space-x-4 mt-[-2.0rem]">
-          <FiMessageSquare className="text-gray-500" size={24} />
-          <button className="bg-orange-500 text-white px-4 py-2 rounded-md">
+          <FiMessageSquare style={{ color: "#c3500f" }} size={24} />
+          <button
+            className="text-white px-4 py-2 rounded-md"
+            style={{ backgroundColor: "#c3500f" }}
+          >
             Share
           </button>
-          <button className="text-orange-500">
+          <button style={{ color: "#c3500f" }}>
             <FiEdit size={24} />
           </button>
         </div>
@@ -82,7 +85,7 @@ export default function ProjectPage({ params }) {
           </div>
         </div>
 
-        <div className="flex flex-col mt-20">
+        <div className="flex flex-col mt-20 mb-20">
           <div className="flex flex-col w-full">
             <h2 className="text-2xl font-semibold mb-4 text-center">
               Moodboard
