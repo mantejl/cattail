@@ -9,6 +9,6 @@ This GitHub Repo holds the code for the MVP (minimum viable product) that was pr
 
 In the MVP, users can visit the homepage to fill out an intake form, that is sent to an artist (Elissa's) account, as a request. To see the artist's point of view, users can go to [cattail.vercel.app/requests](https://cattail.vercel.app/requests), which holds the list of requests that Elissa currently has. They can then choose one of the options (accept, refer, decline) on the request card. If the request is accepted, a new Project is created, populated with the images shared in the request. Users can add tasks to the Kanban Board, drag them to different columns, and delete them. They are also able to upload files and images, to the File Upload section and the Moodboard. All of this information is stored in the backend (Firebase DB) for each project. Users can also delete the project by clicking on the trash icon on the top right. 
 
-The next step is to complete the Dashboard page to show all the current tasks and files across all the projects, and implement a fully-functioning timeline. 
+The next step is to make the web app responsive, and complete the Dashboard page to show all the current tasks and files across all the projects, and implement a fully-functioning timeline. 
 
 <img src="/public/CattailLogo.png" alt="image" width="8%" > 
