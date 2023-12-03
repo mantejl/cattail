@@ -3,7 +3,7 @@
 
 Cattail is a lightweight platform that allows freelance designers/artists to streamline their projects. Clients can fill out an intake form which is then sent to the artist as a request. Artists have the option to view the request in detail and then decide if they want to accept it, refer it to another artist or decline it all together. If they choose to accept it, they can track and manage this task in a project page, which includes a Kanban Board, Moodboard and a place to store relevant files. They can also chat with the client to clarify any concerns they have. This platform makes projects requests extremely easy, and combines the functionality of the multiple tools that freelancers currently use into one platform, making the designing process of an artist much easier. 
 
-Cattail was ideated and launched during LavaLab's Fall 2023 Cohort by John Murnen, Elissa Martial, Aman Kumar and Mantej Lamba. LavaLab is USC's premier student-run product incubator, dedicated to fostering innovation and entrepreneurship. 
+Cattail was ideated, launched and developed during LavaLab's Fall 2023 Cohort by John Murnen, Elissa Martial, Aman Kumar and Mantej Lamba. LavaLab is USC's premier student-run product incubator, dedicated to fostering innovation and entrepreneurship. 
 
 This GitHub Repo holds the code for the MVP (minimum viable product) that was presented during Demo Day. It was developed using React, Next.js, Tailwind, Firebase and [deployed on Vercel](https://cattail.vercel.app/). 
 
