@@ -1,36 +1,9 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Cattail is a lightweight platform that allows freelance designers/artists to streamline their projects. Clients can fill out an intake form which is then sent to the artist as a request. Artists have the option to view the request in detail and then decide if they want to accept it, refer it to another artist or decline it all together. If they choose to accept it, they can track and manage this task in a project page, which includes a Kanban Board, Moodboard and a place to store relevant files. They can also chat with the client to clarify any concerns they have. This platform makes projects requests extremely easy, and combines the functionality of the multiple tools that freelancers currently use into one platform, making the designing process of an artist much easier. 
 
-## Getting Started
+Cattail was ideated and launched during LavaLab's Fall 2023 Cohort by John Murnen, Elissa Martial, Aman Kumar and Mantej Lamba. LavaLab is USC's premier student-run product incubator, dedicated to fostering innovation and entrepreneurship. 
 
-First, run the development server:
+This GitHub Repo holds the code for the MVP (minimum viable product) that was presented during Demo Day. It was developed using React, Next.js, Tailwind, Firebase and deployed on vercel: https://cattail.vercel.app/. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+In the MVP, users can visit the homepage to fill out an intake form, that is sent to an artist (Elissa's) account, as a request. To see the artist's point of view, users can go to cattail.vercel.app/requests, which holds the list of requests that Elissa currently has. They can then choose one of the options (accept, refer, decline) on the request card. If the request is accepted, a new Project is created, populated with the images shared in the request. Users can add tasks to the Kanban Board, drag them to different columns, and delete them. They are also able to upload files and images, to the File Upload section and the Moodboard. All of this information is stored in the backend (Firebase DB) for each project. Users can also delete the project by clicking on the trash icon on the top right. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The next step is to complete the Dashboard page to show all the current tasks and files across all the projects, and implement a fully-functioning timeline. 
